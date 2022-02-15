@@ -100,6 +100,20 @@ EOF
   pop_fn
 }
 
+function apply_proxy_certs() {
+  push_fn  "Applying proxy certificate trust to \"${CLUSTER_NAME}\" from \"${ADDITIONAL_CA_TRUST}\""
+
+  if [ -d "${ADDITIONAL_CA_TRUST}" ] 
+  then
+    local dest="/usr/local/share/ca-certificates/custom/"
+    docker exec ${CLUSTER_NAME}-control-plane mkdir -p $dest
+    docker cp ${ADDITIONAL_CA_TRUST}/. ${CLUSTER_NAME}-control-plane:${dest}
+    docker exec ${CLUSTER_NAME}-control-plane update-ca-certificates
+  fi
+
+  pop_fn
+}
+
 function launch_docker_registry() {
   push_fn "Launching container registry \"${LOCAL_REGISTRY_NAME}\" at localhost:${LOCAL_REGISTRY_PORT}"
 
@@ -149,6 +163,7 @@ function kind_init() {
   set -o errexit
 
   kind_create
+  apply_proxy_certs
   apply_nginx_ingress
   install_cert_manager
   launch_docker_registry

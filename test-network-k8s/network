@@ -39,6 +39,9 @@ CHAINCODE_NAME=${TEST_NETWORK_CHAINCODE_NAME:-asset-transfer-basic}
 CHAINCODE_IMAGE=${TEST_NETWORK_CHAINCODE_IMAGE:-ghcr.io/hyperledgendary/fabric-ccaas-asset-transfer-basic:latest}
 CHAINCODE_LABEL=${TEST_NETWORK_CHAINCODE_LABEL:-basic_1.0}
 
+# Used for applying additional CA trusts (e.g. CAs for corporate proxy servers)
+ADDITIONAL_CA_TRUST=${TEST_NETWORK_ADDITIONAL_CA_TRUST:-catrust}
+
 # todo: more complicated config, as these bleed into the yaml descriptors (sed? kustomize? helm (no)? tkn? ansible?...) or other script locations
 TLSADMIN_AUTH=tlsadmin:tlsadminpw
 RCAADMIN_AUTH=rcaadmin:rcaadminpw
@@ -69,6 +72,7 @@ function print_help() {
   log "--- Script Information"
   log "Log file           \t\t: ${LOG_FILE}"
   log "Debug log file     \t\t: ${DEBUG_FILE}"
+  log "Additional CA Trust     : ${ADDITIONAL_CA_TRUST}"
   log
 
 
